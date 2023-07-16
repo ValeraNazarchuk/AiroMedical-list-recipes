@@ -13,8 +13,6 @@ export const RecipeCard: FC<IProps> = ({
   handleRecipeClick,
   selectedRecipes,
 }) => {
-  console.log(info);
-  
 
   return (
     <Link
@@ -31,10 +29,12 @@ export const RecipeCard: FC<IProps> = ({
         }}
       >
         <img className={styles.img} src={info.image_url} alt=""/>
-        <h4 className={styles.title}>{info.name}</h4>
-        <p className={styles.description}>
-          {info.description}
-        </p>
+        <div>
+          <h4 className={styles.title}>{info.name}</h4>
+          <p className={styles.description}>
+            {info.description}
+          </p>
+        </div>
       </div>
     </Link>
   )

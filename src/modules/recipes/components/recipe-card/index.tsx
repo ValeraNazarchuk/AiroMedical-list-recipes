@@ -14,28 +14,26 @@ export const RecipeCard: FC<IProps> = ({
   selectedRecipes,
 }) => {
 
+  const truncateString = (str: string): string => {
+    return str.length > 300 ? str.slice(0, 300).trim() + '...' : str
+  } 
+
   return (
-    <Link
-      className={styles.box}
-      to={`/recipes/${info.id}`}>
-      <div
-        // key={info.id}
+    <Link className={styles.box} to={`/recipes/${info.id}`}>
+      <li
         onContextMenu={(e) => handleRecipeClick(e, info.id)}
-        className={styles.content}
+        className={styles.item}
         style={{
           background: selectedRecipes.has(info.id) ? 'lightblue' : 'white',
-          // height: '20vh',
-          // display: 'flex'
         }}
       >
-        <img className={styles.img} src={info.image_url} alt=""/>
-        <div>
+        <img className={styles.img} src={info.image_url} alt="" />
+        <div className={styles.content}>
           <h4 className={styles.title}>{info.name}</h4>
-          <p className={styles.description}>
-            {info.description}
-          </p>
+          <p className={styles.description}>{truncateString(info.description)}</p>
+          {/* <p className={styles.description}>{info.description}</p> */}
         </div>
-      </div>
+      </li>
     </Link>
   )
 }

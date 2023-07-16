@@ -1,4 +1,5 @@
 import React from 'react'
+import './assets/style/reset.css'
 import './assets/style/main.css'
 import { CRouter } from './modules/root'
 import { ConfigProvider } from 'antd'

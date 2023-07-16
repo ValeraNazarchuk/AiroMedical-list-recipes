@@ -20,20 +20,26 @@ export const SecondaryButton = ({
 }: IProps) => {
   const styles = createStyleSheet({
     buttonStyle: {
-      color: '#686868',
+      color: '#000',
       backgroundColor: '#fff',
-      border: '1px #979797 solid',
+      border: '1px #000 solid',
       transition: 'all 0.3s ease 0s',
       fontSize: '14px',
       padding: '11px 36px',
       borderRadius: '32px',
       fontWeight: '400',
+      cursor: !disabled ? 'pointer' : 'no-drop',
       ...individualStyle,
     },
   })
 
   return (
-    <button style={styles.buttonStyle} type={type} onClick={onClick}>
+    <button
+      style={styles.buttonStyle}
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {text}
     </button>
   )

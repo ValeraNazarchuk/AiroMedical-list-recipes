@@ -5,7 +5,8 @@ import { useStore } from '../../../../store'
 import { Pagination } from '../../components/pagination'
 import { RecipeCard } from '../../components/recipe-card'
 import { PrimaryButton } from '../../../../core/components/buttons/primary-button'
-import { SecondaryButton } from '../../../../core/components/buttons/secondary-button'
+import { Loader } from '../../../../core/components//loader/index'
+import _ from 'lodash'
 
 export const ListRecipesPage: React.FC = () => {
   // const [data, setData] = useState<any>(null)
@@ -69,41 +70,43 @@ export const ListRecipesPage: React.FC = () => {
 
   return (
     <>
-      <div
-        ref={listRef}
-        // onScroll={handleScroll}
-        // style={{ height: '100vh', overflowY: 'scroll' }}
-        style={{ height: '100vh', overflowY: 'scroll' }}
-      >
-        <ul>
-          {recipes.slice(0, 15).map((recipe: any) => (
-            <RecipeCard
-              key={recipe.id}
-              info={recipe}
-              handleRecipeClick={handleRecipeClick}
-              selectedRecipes={selectedRecipes}
+      {!_.isEmpty(recipes) ? (
+        <div
+          ref={listRef}
+          // onScroll={handleScroll}
+          // style={{ height: '100vh', overflowY: 'scroll' }}
+          style={{ height: '100vh', overflowY: 'scroll' }}
+        >
+          <ul>
+            {recipes.slice(0, 15).map((recipe: any) => (
+              <RecipeCard
+                key={recipe.id}
+                info={recipe}
+                handleRecipeClick={handleRecipeClick}
+                selectedRecipes={selectedRecipes}
+              />
+            ))}
+          </ul>
+          {selectedRecipes.size > 0 && (
+            <PrimaryButton
+              text="Delete"
+              onClick={handleDeleteClick}
+              individualStyle={{
+                position: 'fixed',
+                top: 10,
+                right: 20,
+              }}
             />
-          ))}
-        </ul>
-        {selectedRecipes.size > 0 && (
-          <PrimaryButton text="Delete" onClick={handleDeleteClick} 
-          individualStyle={{
-            position: 'fixed',
-            top: 10,
-            right: 20,
-          }}
+          )}
+          <Pagination
+            page={page}
+            onClickNextPage={nextPage}
+            onClickPrevPage={prevPage}
           />
-          // <button onClick={handleDeleteClick}>Delete</button>
-        )}
-        <Pagination
-          page={page}
-          onClickNextPage={nextPage}
-          onClickPrevPage={prevPage}
-        />
-        {/* <button onClick={nextPage}>Next</button>
-        <div>{page}</div>
-        <button onClick={prevPage} disabled={page < 2}>Prev</button> */}
-      </div>
+        </div>
+      ) : (
+        <Loader />
+      )}
     </>
   )
 }

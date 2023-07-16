@@ -7,9 +7,10 @@
   color: #000;
 }
 
-.content {
+.item {
   height: 19vh;
   display: flex;
+  justify-content: space-between;
   grid-template-columns: 1fr 3fr;
   grid-template-rows: repeat(2, 1fr);
   padding: 20px;
@@ -17,7 +18,14 @@
   border-radius: 15px;
 }
 
+.content {
+  width: 400px;
+}
+
 .img {
   height: 100%;
-  margin-right: 30px;
+}
+
+.title {
+  margin-bottom: 15px;
 }

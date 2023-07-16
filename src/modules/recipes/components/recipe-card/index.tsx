@@ -17,10 +17,7 @@ export const RecipeCard: FC<IProps> = ({
   const truncateString = (str: string): string => {
     return str.length > 300 ? str.slice(0, 300).trim() + '...' : str
   }
-
-  console.log(info)
   
-
   return (
     <Link 
       className={styles.box} 

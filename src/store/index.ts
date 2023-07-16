@@ -5,7 +5,7 @@ export const useStore = create((set) => ({
   selectedRecipes: new Set(),
   page: 1,
   addRecipes: (newRecipes: any) => set(() => ({ recipes: [...newRecipes] })),
-  toggleRecipeSelection: (recipeId: any) =>
+  toggleRecipeSelection: (recipeId: number) =>
     set((state: any) => {
       const selectedRecipes = new Set(state.selectedRecipes)
       selectedRecipes.has(recipeId)

@@ -59,6 +59,9 @@ export const ListRecipesPage: React.FC = () => {
 
   const handleDeleteClick = () => {
     deleteSelectedRecipes()
+    // if(recipes.length === 0) {
+      // console.log(deleteSelectedRecipes)
+    // }
   }
 
   // const handleScroll = (e: any) => {
@@ -67,6 +70,7 @@ export const ListRecipesPage: React.FC = () => {
   //     nextPage()
   //   }
   // }
+  
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './styles.module.css'
 import { getRecipesReq } from '../../../../api'
 import { useStore } from '../../../../store'
@@ -9,9 +9,6 @@ import { Loader } from '../../../../core/components//loader/index'
 import _ from 'lodash'
 
 export const ListRecipesPage: React.FC = () => {
-  // const [data, setData] = useState<any>(null)
-  // const [page, setPage] = useState<number>(1)
-
   const recipes = useStore((state: any) => state.recipes)
   const selectedRecipes = useStore((state: any) => state.selectedRecipes)
   const page = useStore((state: any) => state.page)
@@ -25,28 +22,31 @@ export const ListRecipesPage: React.FC = () => {
   const nextPage = useStore((state: any) => state.nextPage)
   const prevPage = useStore((state: any) => state.prevPage)
 
-  const listRef = useRef(null)
+  const [startIndex, setStartIndex] = useState(0)
+
+  const visibleRecipes = recipes.slice(startIndex, startIndex + 15)
+
+  const [showLoader, setShowLoader] = useState(false)
 
   const loadRecipes = async () => {
     try {
       const response = await getRecipesReq(page)
       addRecipes(response)
-      // setIsLoading(true)
     } catch (error) {
-      // errorError(error.message)
       console.log(error)
     }
   }
 
+  // ЗРОБИТИ загрузку наступної сторінки при видалені всього,
+  // Скролл верх при переході на наступну сторінку 
+  // Шоб оставалася пагінація при видалені всих елементів
+
+  if (_.isEmpty(recipes)) {
+    // nextPage()
+  }
+
   useEffect(() => {
     loadRecipes()
-    // console.log(1);
-
-    //   const apiUrl = `https://api.punkapi.com/v2/beers?page=${page}`
-    //   axios.get(apiUrl).then((resp) => {
-    //     const allPersons = resp.data
-    //     setData(allPersons)
-    //   })
   }, [page])
 
   const handleRecipeClick = (
@@ -59,30 +59,32 @@ export const ListRecipesPage: React.FC = () => {
 
   const handleDeleteClick = () => {
     deleteSelectedRecipes()
-    // if(recipes.length === 0) {
-      // console.log(deleteSelectedRecipes)
-    // }
   }
 
-  // const handleScroll = (e: any) => {
-  //   const element = e.target
-  //   if (element.scrollTop + element.clientHeight === element.scrollHeight) {
-  //     nextPage()
-  //   }
-  // }
-  
+  const handleScroll = (e: React.MouseEvent<HTMLLIElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } =
+      e.target as HTMLInputElement
+
+    if (scrollTop < 10 && startIndex >= 5) {
+      setStartIndex(startIndex - 5)
+    } else if (scrollTop + clientHeight > scrollHeight && startIndex < 10) {
+      setShowLoader(true)
+      setTimeout(() => {
+        setStartIndex(startIndex + 5)
+        setShowLoader(false)
+      }, 1000)
+    }
+  }
 
   return (
     <>
       {!_.isEmpty(recipes) ? (
         <div
-          ref={listRef}
-          // onScroll={handleScroll}
-          // style={{ height: '100vh', overflowY: 'scroll' }}
-          style={{ height: '100vh', overflowY: 'scroll' }}
+          onScroll={(e: React.MouseEvent<any>) => handleScroll(e)}
+          style={{ height: '100vh', overflow: 'auto' }}
         >
           <ul>
-            {recipes.slice(0, 15).map((recipe: any) => (
+            {visibleRecipes.slice(0, 15).map((recipe: any) => (
               <RecipeCard
                 key={recipe.id}
                 info={recipe}
@@ -102,14 +104,18 @@ export const ListRecipesPage: React.FC = () => {
               }}
             />
           )}
-          <Pagination
-            page={page}
-            onClickNextPage={nextPage}
-            onClickPrevPage={prevPage}
-          />
+          {!showLoader ? (
+            <Pagination
+              page={page}
+              onClickNextPage={nextPage}
+              onClickPrevPage={prevPage}
+            />
+          ) : (
+            <Loader height={'150px'} />
+          )}
         </div>
       ) : (
-        <Loader />
+        <Loader height={'100vh'} />
       )}
     </>
   )

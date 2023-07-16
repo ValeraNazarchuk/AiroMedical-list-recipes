@@ -15,7 +15,7 @@ export const RecipeCard: FC<IProps> = ({
   selectedRecipes,
 }) => {
   const truncateString = (str: string): string => {
-    return str.length > 300 ? str.slice(0, 300).trim() + '...' : str
+    return str.length > 270 ? str.slice(0, 270).trim() + '...' : str
   }
   
   return (

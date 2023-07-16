@@ -14,6 +14,7 @@ export const Pagination: FC<IProps> = ({
   onClickNextPage,
   onClickPrevPage,
 }) => {
+
   return (
     <div className={styles.box}>
       <SecondaryButton

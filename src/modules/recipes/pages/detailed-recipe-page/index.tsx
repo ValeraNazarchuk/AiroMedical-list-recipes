@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import styles from './styles.module.css'
-import {Link, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { SecondaryButton } from '../../../../core/components/buttons/secondary-button'
 
 export const RecipeDetailedPage: React.FC = () => {
   const location = useLocation()
   const { info } = location.state
-
-  console.log(info.food_pairing)
 
   return (
     <div className={styles.wrapper}>
@@ -34,16 +32,14 @@ export const RecipeDetailedPage: React.FC = () => {
         </div>
         <div className={styles.contentBox}>
           <h4 className={styles.contentTitle}>Food pairing:</h4>
-          {
-            info.food_pairing.map((food:string, index:number) => {
-              return (
-                <div key={index} style={{display: 'flex'}}>
-                  <p className={styles.contentText}>{index + 1}.</p>
-                  <p className={styles.contentText}>{food}</p>
-                </div>
-              )
-            })
-          }
+          {info.food_pairing.map((food: string, index: number) => {
+            return (
+              <div key={index} style={{ display: 'flex' }}>
+                <p className={styles.contentText}>{index + 1}.</p>
+                <p className={styles.contentText}>{food}</p>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>

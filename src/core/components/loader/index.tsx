@@ -1,7 +1,11 @@
 import React from 'react'
 import { TailSpin } from 'react-loader-spinner'
 
-export const Loader = () => {
+interface IProps {
+  height: string
+}
+
+export const Loader = ({ height }:IProps) => {
   return (
     <TailSpin
       height="80"
@@ -12,7 +16,7 @@ export const Loader = () => {
       wrapperStyle={{
         display: 'grid',
         placeItems: 'center',
-        height: '100vh',
+        height: `${height}`,
         wight: '100vw',
       }}
       wrapperClass=""

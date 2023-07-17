@@ -1,14 +1,13 @@
 .box {
-  /* height: 20vh; */
   display: block;
   width: 600px;
-  margin: 0 auto 10px;
+  margin: 10px auto 0px;
   text-decoration: none;
   color: #000;
 }
 
 .item {
-  height: 19vh;
+  height: 18.5vh;
   display: flex;
   justify-content: space-between;
   grid-template-columns: 1fr 3fr;

@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import styles from './style.module.css'
 import { Link } from 'react-router-dom'
-import {Abv} from '../../interface/index'
+import {Beer} from '../../interface/index'
 
 interface IProps {
-  info: Abv<string, string | null, string[]>
+  info: Beer
   handleRecipeClick: (e: React.MouseEvent<HTMLLIElement>, id: number) => void
   selectedRecipes: Set<number>
 }

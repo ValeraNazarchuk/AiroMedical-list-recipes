@@ -1,12 +1,21 @@
 import { create } from 'zustand'
+import { Beer, StoreState } from '../modules/recipes/interface'
 
-export const useStore = create((set) => ({
+interface StoreActions {
+  addRecipes: (newRecipes: Beer[]) => void
+  toggleRecipeSelection: (recipeId: number) => void
+  deleteSelectedRecipes: () => void
+  nextPage: () => void
+  prevPage: () => void
+}
+
+export const useStore = create<StoreState & StoreActions>((set) => ({
   recipes: [],
-  selectedRecipes: new Set(),
+  selectedRecipes: new Set<number>(),
   page: 1,
-  addRecipes: (newRecipes: any) => set(() => ({ recipes: [...newRecipes] })),
+  addRecipes: (newRecipes: Beer[]) => set(() => ({ recipes: [...newRecipes] })),
   toggleRecipeSelection: (recipeId: number) =>
-    set((state: any) => {
+    set((state) => {
       const selectedRecipes = new Set(state.selectedRecipes)
       selectedRecipes.has(recipeId)
         ? selectedRecipes.delete(recipeId)
@@ -14,13 +23,13 @@ export const useStore = create((set) => ({
       return { selectedRecipes }
     }),
   deleteSelectedRecipes: () =>
-    set((state: any) => {
+    set((state) => {
       const recipes = state.recipes.filter(
-        (recipe: any) => !state.selectedRecipes.has(recipe.id)
+        (recipe) => !state.selectedRecipes.has(recipe.id)
       )
-      const selectedRecipes = new Set()
+      const selectedRecipes = new Set<number>()
       return { recipes, selectedRecipes }
     }),
-  nextPage: () => set((state: any) => ({ page: state.page + 1 })),
-  prevPage: () => set((state: any) => ({ page: state.page - 1 })),
+  nextPage: () => set((state) => ({ page: state.page + 1 })),
+  prevPage: () => set((state) => ({ page: state.page - 1 })),
 }))

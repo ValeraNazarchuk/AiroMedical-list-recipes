@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styles from './styles.module.css'
 import { getRecipesReq } from '../../../../api'
 import { useStore } from '../../../../store'
@@ -7,26 +7,25 @@ import { RecipeCard } from '../../components/recipe-card'
 import { PrimaryButton } from '../../../../core/components/buttons/primary-button'
 import { Loader } from '../../../../core/components//loader/index'
 import _ from 'lodash'
+import { Beer } from '../../interface'
 
 export const ListRecipesPage: React.FC = () => {
-  const recipes = useStore((state: any) => state.recipes)
-  const selectedRecipes = useStore((state: any) => state.selectedRecipes)
-  const page = useStore((state: any) => state.page)
-  const addRecipes = useStore((state: any) => state.addRecipes)
-  const toggleRecipeSelection = useStore(
-    (state: any) => state.toggleRecipeSelection
-  )
-  const deleteSelectedRecipes = useStore(
-    (state: any) => state.deleteSelectedRecipes
-  )
-  const nextPage = useStore((state: any) => state.nextPage)
-  const prevPage = useStore((state: any) => state.prevPage)
+  const recipes = useStore((state) => state.recipes)
+  const selectedRecipes = useStore((state) => state.selectedRecipes)
+  const page = useStore((state) => state.page)
+  const addRecipes = useStore((state) => state.addRecipes)
+  const toggleRecipeSelection = useStore((state) => state.toggleRecipeSelection)
+  const deleteSelectedRecipes = useStore((state) => state.deleteSelectedRecipes)
+  const nextPage = useStore((state) => state.nextPage)
+  const prevPage = useStore((state) => state.prevPage)
 
   const [startIndex, setStartIndex] = useState(0)
 
   const visibleRecipes = recipes.slice(startIndex, startIndex + 15)
 
   const [showLoader, setShowLoader] = useState(false)
+
+  const listRef = useRef<HTMLDivElement>(null)
 
   const loadRecipes = async () => {
     try {
@@ -35,14 +34,6 @@ export const ListRecipesPage: React.FC = () => {
     } catch (error) {
       console.log(error)
     }
-  }
-
-  // ЗРОБИТИ загрузку наступної сторінки при видалені всього,
-  // Скролл верх при переході на наступну сторінку 
-  // Шоб оставалася пагінація при видалені всих елементів
-
-  if (_.isEmpty(recipes)) {
-    // nextPage()
   }
 
   useEffect(() => {
@@ -59,6 +50,14 @@ export const ListRecipesPage: React.FC = () => {
 
   const handleDeleteClick = () => {
     deleteSelectedRecipes()
+    if (recipes.length - selectedRecipes.size === 0) {
+      nextPage()
+      if (listRef.current) {
+        listRef.current.scrollTo({
+          top: 0,
+        })
+      }
+    }
   }
 
   const handleScroll = (e: React.MouseEvent<HTMLLIElement>) => {
@@ -76,15 +75,36 @@ export const ListRecipesPage: React.FC = () => {
     }
   }
 
+  const onClickNextPage = () => {
+    nextPage()
+    setStartIndex(0)
+    if (listRef.current) {
+      listRef.current.scrollTo({
+        top: 0,
+      })
+    }
+  }
+
+  const onClickPrevPage = () => {
+    prevPage()
+    setStartIndex(0)
+    if (listRef.current) {
+      listRef.current.scrollTo({
+        top: 0,
+      })
+    }
+  }
+
   return (
     <>
       {!_.isEmpty(recipes) ? (
         <div
+          ref={listRef}
           onScroll={(e: React.MouseEvent<any>) => handleScroll(e)}
           style={{ height: '100vh', overflow: 'auto' }}
         >
           <ul>
-            {visibleRecipes.slice(0, 15).map((recipe: any) => (
+            {visibleRecipes.slice(0, 15).map((recipe: Beer) => (
               <RecipeCard
                 key={recipe.id}
                 info={recipe}
@@ -107,8 +127,8 @@ export const ListRecipesPage: React.FC = () => {
           {!showLoader ? (
             <Pagination
               page={page}
-              onClickNextPage={nextPage}
-              onClickPrevPage={prevPage}
+              onClickNextPage={onClickNextPage}
+              onClickPrevPage={onClickPrevPage}
             />
           ) : (
             <Loader height={'150px'} />

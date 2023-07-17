@@ -1,66 +1,64 @@
-interface Volume<T extends string> {
+interface BoilVolume {
   value: number
-  unit: T
+  unit: string
 }
 
-interface BoilVolume<T extends string> extends Volume<T> {}
+interface Brewer {
+  brewers_tips: string
+  contributed_by: string
+}
 
-interface MashTemp<T extends string> {
-  temp: {
-    value: number
-    unit: T
-  }
+interface Ingredient {
+  malt: string[]
+  hops: string[]
+  yeast: string
+}
+
+interface MashTemp {
+  temp: { value: number; unit: string }
   duration: number
 }
 
-interface Fermentation<T extends string> {
-  temp: Volume<T>
+interface Fermentation {
+  temp: { value: number; unit: string }
 }
 
-interface Method<T extends string, U extends string | null> {
-  mash_temp: MashTemp<T>[]
-  fermentation: Fermentation<T>
-  twist: U
+interface Method {
+  mash_temp: MashTemp[]
+  fermentation: Fermentation
+  twist: string | null
 }
 
-interface Malt<T extends string> {
-  name: T
-  amount: Volume<T>
+interface Volume {
+  value: number
+  unit: string
 }
 
-interface Hop<T extends string> {
-  name: T
-  amount: Volume<T>
-  add: T
-  attribute: T
-}
-
-interface Ingredient<T extends string> {
-  malt: Malt<T>[]
-  hops: Hop<T>[]
-  yeast: T
-}
-
-export interface Abv<T extends string, U extends string | null, V extends string[]> {
+export interface Beer {
   abv: number
   attenuation_level: number
-  boil_volume: BoilVolume<T>
-  brewers_tips: T
-  contributed_by: T
-  description: T
+  boil_volume: BoilVolume
+  brewers: Brewer
+  description: string
   ebc: number
-  first_brewed: T
-  food_pairing: V
+  first_brewed: string
+  food_pairing: string[]
   ibu: number
   id: number
-  image_url: T
-  ingredients: Ingredient<T>
-  method: Method<T, U>
-  name: T
+  image_url: string
+  ingredients: Ingredient
+  method: Method
+  name: string
   ph: number
   srm: number
-  tagline: T
+  tagline: string
   target_fg: number
   target_og: number
-  volume: Volume<T>
+  volume: Volume
+}
+
+export interface StoreState {
+  recipes: Beer[]
+  selectedRecipes: Set<number>
+  page: number
 }

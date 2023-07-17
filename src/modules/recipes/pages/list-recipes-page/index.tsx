@@ -64,14 +64,14 @@ export const ListRecipesPage: React.FC = () => {
     const { scrollTop, clientHeight, scrollHeight } =
       e.target as HTMLInputElement
 
-    if (scrollTop < 10 && startIndex >= 5) {
+    if (scrollTop < 20 && startIndex >= 5) {
       setStartIndex(startIndex - 5)
     } else if (scrollTop + clientHeight > scrollHeight && startIndex < 10) {
       setShowLoader(true)
       setTimeout(() => {
         setStartIndex(startIndex + 5)
         setShowLoader(false)
-      }, 1000)
+      }, 600)
     }
   }
 
